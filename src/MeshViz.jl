@@ -55,6 +55,7 @@ viz(mesh, color = 1:nelements(mesh))
     showfacets    = false,
     variable      = nothing,
     decimation    = 0.0,
+    ssao          = true,
   )
 end
 
