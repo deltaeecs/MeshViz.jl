@@ -2,6 +2,30 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
+"""
+get triangles for elem
+"""
+function getTris4ele(elem::T) where {T}
+  I = indices(elem)
+  [[I[1], I[i], I[i+1]] for i in 2:length(I)-1]
+end
+function  getTris4ele(elem::T)  where {T<:Connectivity{Triangle}}
+  I = indices(elem)
+  [[I[1], I[2], I[3]], ]
+end
+function getTris4ele(elem::T)  where {T<:Connectivity{Tetrahedron}}
+  I = indices(elem)
+  [[I[1], I[2], I[3]], [I[2], I[1], I[4]], [I[2], I[4], I[3]], [I[3], I[4], I[1]]]
+end
+function getTris4ele(elem::T)  where {T<:Connectivity{Hexahedron}}
+  I = indices(elem)
+  [ [I[1], I[4], I[2]], [I[2], I[4], I[3]], [I[5], I[6], I[7]], [I[5], I[7], I[8]],
+    [I[1], I[2], I[5]], [I[5], I[2], I[6]], [I[3], I[4], I[7]], [I[4], I[8], I[7]],
+    [I[2], I[3], I[7]], [I[2], I[7], I[6]], [I[1], I[5], I[4]], [I[4], I[5], I[8]]]
+end
+
+
+
 Makie.plottype(::SimpleMesh) = Viz{<:Tuple{SimpleMesh}}
 
 function Makie.plot!(plot::Viz{<:Tuple{SimpleMesh}})
@@ -25,8 +49,7 @@ function Makie.plot!(plot::Viz{<:Tuple{SimpleMesh}})
 
   # fan triangulation (assume convexity)
   tris4elem = map(elems) do elem
-    I = indices(elem)
-    [[I[1], I[i], I[i+1]] for i in 2:length(I)-1]
+    getTris4ele(elem)
   end
 
   # flatten vector of triangles

@@ -100,6 +100,33 @@ import CairoMakie as Mke
   viz(s)
   viz(s, color = :orange)
 
+  ## Polyhedron
+  # Triangle
+  o = Triangle([(0.0,0.0,1.0), (0.0,1.0,0.0), (1.0,0.0,0.0)])
+  viz(o)
+  viz(o, showboundary = false)
+  viz(o, color = :orange)
+  viz(o, color = :cyan, boundarycolor = :red)
+
+  # Tetrahedron
+  t = Tetrahedron([(0.0,0.0,0.0), (0.0,0.0,1.0), (0.0,1.0,0.0), (1.0,0.0,0.0)])
+  viz(t)
+  viz(t, showboundary = false)
+  viz(t, color = :orange)
+  viz(t, color = :cyan, boundarycolor = :red)
+  
+  # Hexahedron
+  # o = Hexahedron([(0.0,0.0,0.0), (1.0,0.0,0.0), (1.0,1.0,0.0), (0.0,1.0,0.0),
+  #                 (0.0,0.0,1.0), (1.0,0.0,1.0), (1.0,1.0,1.0), (0.0,1.0,1.0)])
+  h = Hexahedron([(5.0,0.0,0.0), (6.0,0.0,0.0), (6.0,1.0,0.0), (5.0,1.0,0.0),
+                  (5.0,0.0,1.0), (6.0,0.0,1.0), (6.0,1.0,1.0), (5.0,1.0,1.0)])
+
+  viz([t, h], color = [:blue, :red])
+  viz([t, h], showboundary = false)
+  viz([t, h], color = 1:2)
+  viz([t, h], color = :cyan, boundarycolor = :red)
+
+
   # Collections of geometries
   t = Triangle((1.,0.), (2.,0.), (2.,1.))
   q = Quadrangle((0.,0.), (1.,0.), (1.,1.), (0.,1.))
@@ -118,6 +145,25 @@ import CairoMakie as Mke
   viz(m, color = 1:nelements(m))
   viz(m, color = 1:nelements(m), showfacets = true)
   viz(m, color = :orange, showfacets = true, facetcolor = :cyan)
+
+  # Simple meshes 2
+  ps  = Meshes.Point.([(0.0,0.0,0.0), (0.0,0.0,1.0), (0.0,1.0,0.0), (1.0,0.0,0.0)])
+  c   = connect.([(1, 2, 3, 4), ], Tetrahedron)
+  m   = SimpleMesh(ps, c) 
+  viz(m, shading = false)
+  viz(m, showboundary = false)
+  viz(m, color = :orange)
+  viz(m, color = :cyan, boundarycolor = :red)
+  
+  # Simple meshes 3
+  ps  = Meshes.Point.([ (0.0,0.0,0.0), (1.0,0.0,0.0), (1.0,1.0,0.0), (0.0,1.0,0.0),
+                        (0.0,0.0,1.0), (1.0,0.0,1.0), (1.0,1.0,1.0), (0.0,1.0,1.0)])
+  c   = connect.([(1, 2, 3, 4, 5, 6, 7, 8), ], Hexahedron)
+  m   = SimpleMesh(ps, c) 
+  viz(m, shading = false)
+  viz(m, showboundary = false)
+  viz(m, color = :orange)
+  viz(m, color = :cyan, boundarycolor = :red)
 
   # 2D partitions
   g = CartesianGrid(10, 10)
