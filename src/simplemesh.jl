@@ -32,9 +32,14 @@ function Makie.plot!(plot::Viz{<:Tuple{SimpleMesh}})
   # retrieve mesh object
   mesh = plot[:object][]
 
-  color      = plot[:color][]
-  facetcolor = plot[:facetcolor][]
-  showfacets = plot[:showfacets][]
+  color       = plot[:color][]
+  alpha       = plot[:alpha][]
+  colorscheme = plot[:colorscheme][]
+  facetcolor  = plot[:facetcolor][]
+  showfacets  = plot[:showfacets][]
+
+  # process color spec into colorant
+  colorant = process(color, colorscheme, alpha)
 
   # relevant settings
   dim   = embeddim(mesh)
@@ -77,7 +82,7 @@ function Makie.plot!(plot::Viz{<:Tuple{SimpleMesh}})
       tcolors = map(1:nv) do i
         t = ceil(Int, i/3)
         e = elem4tri[t]
-        color[e]
+        colorant[e]
       end
     elseif ncolor == nvert # vertex coloring
       # nothing needs to be done because
@@ -87,16 +92,16 @@ function Makie.plot!(plot::Viz{<:Tuple{SimpleMesh}})
       # the original polygonal mesh
       tcoords = coords
       tconnec = tris
-      tcolors = color
+      tcolors = colorant
     else
       throw(ArgumentError("Provided $ncolor colors but the mesh has
                            $nvert vertices and $nelem elements"))
     end
   else # single color
     # nothing needs to be done
-    tcoords = coords
-    tconnec = tris
-    tcolors = color
+    tcoords  = coords
+    tconnec  = tris
+    tcolors  = colorant
   end
 
   # convert connectivities to matrix format
@@ -107,7 +112,6 @@ function Makie.plot!(plot::Viz{<:Tuple{SimpleMesh}})
 
   Makie.mesh!(plot, tcoords, tmatrix,
     color = tcolors,
-    colormap = plot[:colormap],
     shading = shading, 
   )
 

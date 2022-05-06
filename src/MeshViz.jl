@@ -10,7 +10,9 @@ using Tables
 using CategoricalArrays: CategoricalValue
 using CategoricalArrays: levelcode
 
+using Colors: Colorant, coloralpha
 using Colors: distinguishable_colors
+using ColorSchemes: colorschemes
 
 import Makie
 
@@ -21,7 +23,8 @@ Visualize Meshes.jl `object` with various options:
 
 * `size`          - size of points in point set
 * `color`         - color of geometries or points
-* `colormap`      - colormap used for colors
+* `alpha`         - transparency channel in [0,1]
+* `colorscheme`   - color scheme from ColorSchemes.jl
 * `boundarycolor` - color of the boundary (e.g. segments)
 * `facetcolor`    - color of the facets (e.g. edges)
 * `showboundary`  - tells whether or not to show the boundary
@@ -48,7 +51,8 @@ viz(mesh, color = 1:nelements(mesh))
   Makie.Attributes(;
     size          = Makie.theme(scene, :markersize),
     color         = :slategray3,
-    colormap      = :viridis,
+    alpha         = 1.0,
+    colorscheme   = :viridis,
     boundarycolor = :gray30,
     facetcolor    = :gray30,
     showboundary  = true,
@@ -58,6 +62,9 @@ viz(mesh, color = 1:nelements(mesh))
     ssao          = true,
   )
 end
+
+# color handling
+include("colors.jl")
 
 # domain
 include("simplemesh.jl")
